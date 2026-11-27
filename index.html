@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Kuis Akhir: Gaya</title>
+<link href="https://fonts.googleapis.com/css2?family=Lexend:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#f3f7f6;--card:#fff;--ink:#14302e;--mute:#587270;--line:#cfdedc;--accent:#1f6f6b;--on:#fff;--ok:#1b7a43;--okbg:#e2f4e9;--bad:#b3261e;--badbg:#fbe9e7;--sel:#e0f0ee;
+box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0f1c1b;--card:#172a28;--ink:#e6f1ef;--mute:#9db8b5;--line:#2b4543;--accent:#4fb5ae;--on:#0b1514;--ok:#6fd49a;--okbg:#163a27;--bad:#ff9a92;--badbg:#3d1e1b;--sel:#1f3b39;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#0f1c1b;--card:#172a28;--ink:#e6f1ef;--mute:#9db8b5;--line:#2b4543;--accent:#4fb5ae;--on:#0b1514;--ok:#6fd49a;--okbg:#163a27;--bad:#ff9a92;--badbg:#3d1e1b;--sel:#1f3b39;color-scheme:dark}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:Lexend,system-ui,sans-serif;line-height:1.6}
+main{max-width:720px;margin:0 auto;padding:24px 16px 64px}
+h1{font-size:1.7rem;line-height:1.25;margin:0 0 6px}
+.sub{color:var(--mute);margin:0 0 20px}
+.id{display:grid;gap:8px;margin-bottom:20px}
+input[type=text],textarea{width:100%;font:inherit;color:var(--ink);background:var(--card);border:1.5px solid var(--line);border-radius:8px;padding:10px 12px}
+input:focus-visible,textarea:focus-visible,button:focus-visible,label:focus-within{outline:3px solid var(--accent);outline-offset:2px}
+.q{background:var(--card);border:1.5px solid var(--line);border-radius:12px;padding:16px;margin-bottom:14px}
+.q.ok{border-color:var(--ok)}.q.bad{border-color:var(--bad)}
+.q .t{margin:0 0 10px;font-weight:500}
+.q .n{display:inline-block;min-width:1.8em;color:var(--accent);font-weight:700}
+.type{font-size:.85rem;color:var(--mute);margin-left:4px}
+.opts{display:grid;gap:8px}
+.opt{display:flex;gap:10px;align-items:flex-start;padding:10px 12px;border:1.5px solid var(--line);border-radius:8px;cursor:pointer}
+.opt:has(input:checked){background:var(--sel);border-color:var(--accent)}
+.opt input{margin-top:5px;accent-color:var(--accent)}
+.fb{margin-top:10px;padding:10px 12px;border-radius:8px;font-size:.92rem;display:none}
+.q.ok .fb{display:block;background:var(--okbg);color:var(--ok)}
+.q.bad .fb{display:block;background:var(--badbg);color:var(--bad)}
+.q.info .fb{display:block;background:var(--sel);color:var(--ink)}
+.fb b{display:block}
+.fb span{color:var(--ink)}
+.bar{display:flex;gap:10px;flex-wrap:wrap;margin-top:18px}
+button{font:inherit;font-weight:500;border-radius:8px;padding:12px 20px;border:1.5px solid var(--accent);cursor:pointer}
+.pri{background:var(--accent);color:var(--on)}
+.sec{background:transparent;color:var(--accent)}
+#res{display:none;background:var(--accent);color:var(--on);border-radius:12px;padding:18px;margin-bottom:16px}
+#res strong{font-size:1.6rem}
+.err{color:var(--bad);margin-top:8px;display:none}
+@media print{button{display:none}}
+</style>
+</head>
+<body>
+<main>
+<h1>Kuis Akhir: Gaya</h1>
+<p class="sub">Jawab 8 soal berikut, lalu tekan Periksa jawaban.</p>
+
+<div class="id">
+<input type="text" id="nama" placeholder="Nama" aria-label="Nama">
+<input type="text" id="kelas" placeholder="Kelas" aria-label="Kelas">
+</div>
+
+<div id="res" role="status"></div>
+<form onsubmit="return false" id="f"></form>
+<div class="err" id="err"></div>
+<div class="bar">
+<button class="pri" id="cek">Periksa jawaban</button>
+<button class="sec" id="ulang">Ulangi kuis</button>
+</div>
+</main>
+
+<script>
+var Q=[
+{t:"Saat mendorong pagar, kita menggunakan gaya otot.",k:"tf",a:"Benar"},
+{t:"Gaya bisa membuat benda bergerak tetapi tidak dapat mengubah bentuk benda.",k:"tf",a:"Salah",e:"Gaya juga dapat mengubah bentuk benda."},
+{t:"Jika kutub utara dan kutub selatan dua magnet didekatkan, keduanya saling tolak-menolak.",k:"tf",a:"Salah",e:"Keduanya saling tarik-menarik."},
+{t:"Mangga jatuh dari pohon ke tanah karena gaya …",k:"mc",o:["otot","gesek","pegas","gravitasi"],a:3},
+{t:"Benda yang dapat ditarik magnet adalah …",k:"mc",o:["penghapus karet","paku besi","daun","sedotan plastik"],a:1},
+{t:"Sol sepatu bola diberi paku untuk …",k:"mc",o:["memperkecil gaya gesek","memperbesar gaya gesek","menambah gaya gravitasi","menambah gaya magnet"],a:1},
+{t:"Roda dipasang pada kontainer agar gaya gesek menjadi …",k:"fill",a:"lebih kecil",ok:function(s){return /kecil|berkurang|rendah/.test(s)}},
+{t:"Mengapa mendorong kursi roda lebih mudah daripada mendorong kursi biasa?",k:"essay",a:"Roda membuat luas permukaan yang bersentuhan dengan lantai lebih kecil sehingga gaya gesek lebih kecil.",ok:function(s){return /kecil|sedikit|berkurang/.test(s)&&/luas|permukaan|sentuh|gesek/.test(s)}}
+];
+var L=["A","B","C","D"],F=document.getElementById("f");
+var tlabel={tf:"Benar/Salah",mc:"Pilihan ganda",fill:"Isian",essay:"Uraian"};
+function esc(s){return s.replace(/&/g,"&amp;").replace(/</g,"&lt;")}
+function build(){
+ var h="";
+ Q.forEach(function(q,i){
+  h+='<fieldset class="q" id="q'+i+'" style="margin-inline:0;min-width:0"><legend style="display:none">Soal '+(i+1)+'</legend><p class="t"><span class="n">'+(i+1)+'.</span>'+esc(q.t)+'<span class="type">('+tlabel[q.k]+')</span></p>';
+  if(q.k=="tf"){h+='<div class="opts">';["Benar","Salah"].forEach(function(v){h+='<label class="opt"><input type="radio" name="n'+i+'" value="'+v+'"><span>'+v+'</span></label>'});h+='</div>'}
+  if(q.k=="mc"){h+='<div class="opts">';q.o.forEach(function(o,j){h+='<label class="opt"><input type="radio" name="n'+i+'" value="'+j+'"><span>'+L[j]+'. '+esc(o)+'</span></label>'});h+='</div>'}
+  if(q.k=="fill")h+='<input type="text" name="n'+i+'" placeholder="Tulis jawabanmu" aria-label="Jawaban soal '+(i+1)+'">';
+  if(q.k=="essay")h+='<textarea name="n'+i+'" rows="3" placeholder="Tulis jawabanmu" aria-label="Jawaban soal '+(i+1)+'"></textarea>';
+  h+='<div class="fb"></div></fieldset>';
+ });
+ F.innerHTML=h;
+}
+function val(i){
+ var q=Q[i],el=F.elements["n"+i];
+ if(q.k=="tf"||q.k=="mc"){var c=F.querySelector('input[name="n'+i+'"]:checked');return c?c.value:""}
+ return el.value.trim();
+}
+function check(){
+ var empty=[];Q.forEach(function(q,i){if(!val(i))empty.push(i+1)});
+ var err=document.getElementById("err");
+ if(empty.length){err.style.display="block";err.textContent="Soal nomor "+empty.join(", ")+" belum dijawab.";return}
+ err.style.display="none";
+ var score=0;
+ Q.forEach(function(q,i){
+  var v=val(i),box=document.getElementById("q"+i),fb=box.querySelector(".fb"),good;
+  if(q.k=="tf")good=v==q.a;
+  else if(q.k=="mc")good=+v==q.a;
+  else good=q.ok(v.toLowerCase());
+  var key=q.k=="mc"?L[q.a]+". "+q.o[q.a]:q.a;
+  if(good)score++;
+  box.className="q "+(good?"ok":"bad");
+  fb.innerHTML="<b>"+(good?"Benar":"Belum tepat")+"</b><span>Kunci: "+esc(key)+(q.e?" ("+esc(q.e)+")":"")+"</span>";
+ });
+ var nama=document.getElementById("nama").value.trim();
+ var r=document.getElementById("res");
+ r.style.display="block";
+ r.innerHTML=(nama?esc(nama)+", skormu ":"Skormu ")+"<strong>"+Math.round(score/Q.length*100)+"</strong> ("+score+" dari "+Q.length+" soal benar).<br><small>Soal uraian dinilai otomatis dari kata kunci, jadi bandingkan juga dengan kunci jawaban.</small>";
+ window.scrollTo({top:0,behavior:"smooth"});
+}
+function reset(){build();var r=document.getElementById("res");r.style.display="none";document.getElementById("err").style.display="none";window.scrollTo({top:0})}
+document.getElementById("cek").onclick=check;
+document.getElementById("ulang").onclick=reset;
+build();
+</script>
+</body>
+</html>
